@@ -11,7 +11,7 @@
 
 ### CDK-internal files (for working on THIS repository)
 - `.claude/commands/` — Slash commands for CDK development only.
-- `.claude/hooks/` — Hooks that run during CDK development sessions (e.g., `set-gh-default.sh`).
+- `.claude/hooks/` — Hooks that run during CDK development sessions.
 - `.claude/settings.json` — Claude Code settings for CDK development.
 
 **Do NOT move template files into `.claude/`.** The `commands/`, `docs/`, and `hooks/` directories are intentionally at the repo root because they are templates, not active Claude Code configuration for this repo.
