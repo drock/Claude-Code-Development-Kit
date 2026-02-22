@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+
+## [2.3.0] - 2026-02-22
 ### Changed
 - Replaced release workflows with a single manually-triggered (`workflow_dispatch`) GitHub Actions workflow that determines version, updates CHANGELOG.md and README badge via shell scripts, then commits, tags, pushes, and creates a GitHub Release — no API keys or external services required
 
