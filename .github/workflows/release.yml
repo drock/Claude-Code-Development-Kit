@@ -1,9 +1,28 @@
-name: Create GitHub Release
+name: Release
+
+# Manually-triggered release workflow.
+#   1. Validates unreleased changelog entries exist
+#   2. Determines the new version (bump keyword or explicit version)
+#   3. Updates CHANGELOG.md and README.md badge
+#   4. Commits, tags, and pushes to main
+#   5. Creates a GitHub Release
 
 on:
-  push:
-    tags:
-      - 'v*'
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: 'Version bump type (ignored if explicit version is provided)'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+      version:
+        description: 'Explicit version (overrides bump type, e.g., 2.3.0 without v prefix)'
+        required: false
+        type: string
 
 permissions:
   contents: write
@@ -12,32 +31,127 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout main
         uses: actions/checkout@v4
+        with:
+          ref: main
 
-      - name: Extract release notes from CHANGELOG.md
-        id: notes
+      - name: Validate unreleased changes
         run: |
-          # Get the tag name (strip leading 'v')
-          VERSION="${GITHUB_REF_NAME#v}"
+          CONTENT=$(awk '/^## \[Unreleased\]/{found=1; next} /^## \[/{exit} found{print}' CHANGELOG.md)
+          if [ -z "$(echo "$CONTENT" | tr -d '[:space:]')" ]; then
+            echo "::error::No unreleased changes found in CHANGELOG.md"
+            exit 1
+          fi
+          echo "Unreleased content found:"
+          echo "$CONTENT"
 
-          # Extract the section for this version from CHANGELOG.md
-          # Matches from "## [X.Y.Z]" up to (but not including) the next "## [" heading
-          NOTES=$(awk -v ver="$VERSION" '
-            /^## \[/ {
-              if (found) exit
-              if ($0 ~ "\\[" ver "\\]") found=1
+      - name: Determine new version
+        id: version
+        run: |
+          # Get the latest released version from CHANGELOG.md
+          LATEST=$(awk '/^## \[Unreleased\]/{next} /^## \[[0-9]+\.[0-9]+\.[0-9]+\]/{gsub(/.*\[|\].*/,""); print; exit}' CHANGELOG.md)
+          if [ -z "$LATEST" ]; then
+            echo "::error::Could not find a previous version in CHANGELOG.md"
+            exit 1
+          fi
+          echo "Latest released version: $LATEST"
+
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$LATEST"
+
+          # Determine new version
+          if [ -n "${{ inputs.version }}" ]; then
+            NEW_VERSION="${{ inputs.version }}"
+          else
+            BUMP="${{ inputs.bump }}"
+            case "$BUMP" in
+              major) NEW_VERSION="$((MAJOR + 1)).0.0" ;;
+              minor) NEW_VERSION="${MAJOR}.$((MINOR + 1)).0" ;;
+              patch) NEW_VERSION="${MAJOR}.${MINOR}.$((PATCH + 1))" ;;
+            esac
+          fi
+
+          # Validate version format
+          if ! echo "$NEW_VERSION" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "::error::Invalid version format: $NEW_VERSION (expected X.Y.Z)"
+            exit 1
+          fi
+
+          # Validate tag doesn't already exist
+          if git rev-parse "v${NEW_VERSION}" >/dev/null 2>&1; then
+            echo "::error::Tag v${NEW_VERSION} already exists"
+            exit 1
+          fi
+
+          echo "version=$NEW_VERSION" >> "$GITHUB_OUTPUT"
+          echo "old_version=$LATEST" >> "$GITHUB_OUTPUT"
+          echo "Releasing version: $NEW_VERSION"
+
+      - name: Update CHANGELOG.md
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          TODAY=$(date +%Y-%m-%d)
+
+          # Replace the blank lines after [Unreleased] with the new version heading.
+          # Pattern: after the [Unreleased] line, collapse blank lines and insert version heading.
+          awk -v ver="$VERSION" -v date="$TODAY" '
+            /^## \[Unreleased\]/ {
+              print
+              print ""
+              print ""
+              print "## [" ver "] - " date
+              # Skip any blank lines immediately after [Unreleased]
+              while ((getline line) > 0) {
+                if (line ~ /[^ \t]/) {
+                  print line
+                  break
+                }
+              }
               next
             }
-            found { print }
-          ' CHANGELOG.md)
+            { print }
+          ' CHANGELOG.md > CHANGELOG.tmp && mv CHANGELOG.tmp CHANGELOG.md
 
-          # Write to file to preserve multiline content
-          echo "$NOTES" > release_notes.md
+          echo "Updated CHANGELOG.md with version $VERSION"
+
+      - name: Update README.md badge
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          OLD_VERSION="${{ steps.version.outputs.old_version }}"
+
+          sed -i "s/changelog-v${OLD_VERSION}/changelog-v${VERSION}/g" README.md
+
+          echo "Updated README.md badge from v$OLD_VERSION to v$VERSION"
+
+      - name: Extract release notes
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          awk -v ver="$VERSION" '
+            /^## \[/ {
+              if (found) exit
+              if (index($0, "[" ver "]")) { found=1; next }
+            }
+            found { print }
+          ' CHANGELOG.md > release_notes.md
+
+          echo "Release notes:"
+          cat release_notes.md
+
+      - name: Commit, tag, and push
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add CHANGELOG.md README.md
+          git commit -m "release: v${VERSION}"
+          git tag -a "v${VERSION}" -m "Release v${VERSION}"
+          git push origin main --follow-tags
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          name: ${{ github.ref_name }}
+          tag_name: v${{ steps.version.outputs.version }}
+          name: v${{ steps.version.outputs.version }}
           body_path: release_notes.md
           generate_release_notes: false

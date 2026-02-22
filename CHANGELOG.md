@@ -8,9 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
-- GitHub Actions workflow (`release-branch.yml`) to handle releases from Claude Code Web — merges release branches to main and creates tags when direct push is proxy-restricted
-- Updated `/release` command with workflow-assisted fallback (Path B) for Claude Code Web environments
+### Changed
+- Replaced release workflows with a single manually-triggered (`workflow_dispatch`) GitHub Actions workflow that determines version, updates CHANGELOG.md and README badge via shell scripts, then commits, tags, pushes, and creates a GitHub Release — no API keys or external services required
+
+### Removed
+- Removed `release-branch.yml` workflow (superseded by the manual-trigger release workflow)
+- Removed tag-triggered `release.yml` workflow (folded into the manual-trigger release workflow)
+- Removed `/release` slash command (release logic now handled entirely by the workflow's shell scripts)
 
 
 ## [2.2.0] - 2026-02-21

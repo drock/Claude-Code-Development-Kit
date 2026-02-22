@@ -10,7 +10,7 @@
 - `hooks/` — Hook script templates (security scanning, notifications). Installed into the target project's `.claude/hooks/`.
 
 ### CDK-internal files (for working on THIS repository)
-- `.claude/commands/` — Slash commands for CDK development only (e.g., `/release` for publishing new CDK versions).
+- `.claude/commands/` — Slash commands for CDK development only.
 - `.claude/hooks/` — Hooks that run during CDK development sessions (e.g., `set-gh-default.sh`).
 - `.claude/settings.json` — Claude Code settings for CDK development.
 
@@ -33,11 +33,18 @@ When completing work that introduces user-facing changes, add an entry to the `[
 Skip changelog entries for: internal refactors with no user-visible effect, test-only changes, CI/tooling changes, and documentation-only updates (unless documenting a new feature).
 
 ### Creating Releases
-Releases are user-initiated via the `/release` command. Do not create releases, tags, or version bumps automatically. The `/release` command handles:
-1. Moving `[Unreleased]` entries to a new versioned section with today's date
-2. Updating the README version badge
-3. Committing, tagging (`vX.Y.Z`), and pushing
-4. GitHub Release is auto-created by the `.github/workflows/release.yml` Action on tag push
+Releases are handled by a manually-triggered GitHub Actions workflow (`.github/workflows/release.yml`), triggered from the GitHub UI: **Actions → Release → Run workflow**.
+
+The workflow:
+1. Validates that `[Unreleased]` has content
+2. Determines the new version (auto-detect from headings, bump keyword, or explicit version)
+3. Updates CHANGELOG.md (moves unreleased entries to a versioned section) and README badge via shell scripts
+4. Commits, tags (`vX.Y.Z`), and pushes to `main`
+5. Creates a GitHub Release with extracted release notes
+
+No API keys or external services are required — the workflow uses only bash/awk for file updates.
+
+Do not create releases, tags, or version bumps manually. Always use the workflow.
 
 ### Version Bump Rules (SemVer)
 - **patch** (e.g., 2.1.0 → 2.1.1): bug fixes only
