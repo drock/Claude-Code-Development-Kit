@@ -1,0 +1,6 @@
+{
+  "name": "cdk-security",
+  "description": "MCP security scanning — prevents accidental exposure of secrets and credentials to external services",
+  "version": "3.0.0",
+  "author": { "name": "drock" }
+}

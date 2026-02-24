@@ -1,0 +1,6 @@
+{
+  "name": "cdk-notifications",
+  "description": "Cross-platform audio notifications for task completion and input needed",
+  "version": "3.0.0",
+  "author": { "name": "drock" }
+}

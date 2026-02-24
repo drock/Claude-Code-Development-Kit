@@ -8,6 +8,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- **BREAKING**: Restructured entire CDK from template-based installer to plugin marketplace architecture
+- Commands converted to plugin skills (invocation changes from `/command` to `/plugin:skill`, e.g. `/code-review` becomes `/cdk-core:code-review`)
+- Hook scripts moved into dedicated plugins with declarative `hooks.json` configuration
+- Documentation templates bundled into `cdk-docs` plugin scaffold skill
+
+### Added
+- Plugin marketplace manifest (`.claude-plugin/marketplace.json`) for native Claude Code plugin distribution
+- Five modular plugins: `cdk-core`, `cdk-docs`, `cdk-gemini`, `cdk-security`, `cdk-notifications`
+- New `/cdk-docs:scaffold` skill to generate documentation structure in target projects (replaces `setup.sh` file copying)
+- `cdk-claude-section.md` template — appendable CDK standards section that safely extends existing CLAUDE.md files without overwriting
+- Support for user-level, project-level, and local-level plugin installation scopes
+- Local development testing via `claude --plugin-dir`
+- Self-update support via plugin marketplace versioning
+
+### Removed
+- `install.sh` remote installer script (replaced by `/plugin marketplace add`)
+- `setup.sh` interactive setup script (replaced by plugin install + scaffold skill)
+- Template-based file copying approach
+- Top-level `commands/`, `hooks/`, and `docs/` template directories (migrated into plugins)
+
 
 ## [2.3.1] - 2026-02-22
 ### Removed
