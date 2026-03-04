@@ -25,7 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Updated remaining "command" terminology to "skill" in plugin SKILL.md files (code-review, handoff)
-- Added v2.x deprecation note to YouTube demo video in README
+- Removed outdated YouTube demo video (showed v2.x installation flow) from README
 
 ### Removed
 - `install.sh` remote installer script (replaced by `/plugin marketplace add`)
