@@ -1,0 +1,6 @@
+{
+  "name": "cdk-gemini",
+  "description": "Gemini MCP integration with persistent consultation sessions and automatic context injection",
+  "version": "3.0.0",
+  "author": { "name": "drock" }
+}

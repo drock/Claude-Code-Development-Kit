@@ -1,0 +1,6 @@
+{
+  "name": "cdk-core",
+  "description": "Core multi-agent workflow skills: code review, refactoring, context gathering, and session handoff",
+  "version": "3.0.0",
+  "author": { "name": "drock" }
+}

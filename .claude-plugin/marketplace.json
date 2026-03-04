@@ -1,0 +1,38 @@
+{
+  "name": "cdk",
+  "owner": {
+    "name": "drock"
+  },
+  "plugins": [
+    {
+      "name": "cdk-core",
+      "source": "./plugins/cdk-core",
+      "description": "Core multi-agent workflow skills: code review, refactoring, context gathering, and session handoff",
+      "version": "3.0.0"
+    },
+    {
+      "name": "cdk-docs",
+      "source": "./plugins/cdk-docs",
+      "description": "Documentation scaffolding and generation for the 3-tier AI context system",
+      "version": "3.0.0"
+    },
+    {
+      "name": "cdk-gemini",
+      "source": "./plugins/cdk-gemini",
+      "description": "Gemini MCP integration with persistent consultation sessions and automatic context injection",
+      "version": "3.0.0"
+    },
+    {
+      "name": "cdk-security",
+      "source": "./plugins/cdk-security",
+      "description": "MCP security scanning — prevents accidental exposure of secrets and credentials to external services",
+      "version": "3.0.0"
+    },
+    {
+      "name": "cdk-notifications",
+      "source": "./plugins/cdk-notifications",
+      "description": "Cross-platform audio notifications for task completion and input needed",
+      "version": "3.0.0"
+    }
+  ]
+}

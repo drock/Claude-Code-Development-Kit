@@ -1,0 +1,6 @@
+{
+  "name": "cdk-docs",
+  "description": "Documentation scaffolding and generation for the 3-tier AI context system",
+  "version": "3.0.0",
+  "author": { "name": "drock" }
+}

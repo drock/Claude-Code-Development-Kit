@@ -1,20 +1,40 @@
 # Claude Code Development Kit
 
-## Project Structure — Templates vs CDK-Internal Files
+## Project Structure — Plugin Marketplace Architecture
 
-**CRITICAL:** This repository is a *kit* that gets installed into other projects. Most top-level directories are **templates** that will be copied into target projects. Only the `.claude/` directory is for managing THIS CDK project itself.
+**CRITICAL:** This repository is a *private plugin marketplace* that distributes modular plugins for Claude Code. The `plugins/` directory contains 5 independent plugins that users install via the Claude Code plugin system.
 
-### Template directories (for target projects that install the CDK)
-- `commands/` — Slash command templates (e.g., `/code-review`, `/refactor`, `/handoff`). These get installed into the target project's `.claude/commands/`.
-- `docs/` — Documentation templates (tier architecture, context files). Installed into the target project.
-- `hooks/` — Hook script templates (security scanning, notifications). Installed into the target project's `.claude/hooks/`.
+### Plugin directories (distributed to target projects)
+- `plugins/cdk-core/` — Core multi-agent workflow skills (code review, refactoring, context gathering, session handoff)
+- `plugins/cdk-docs/` — Documentation scaffolding and generation (scaffold, create-docs, update-docs)
+- `plugins/cdk-gemini/` — Gemini MCP integration (consultation skill + context injection hook)
+- `plugins/cdk-security/` — MCP security scanning hook (prevents secret exposure to external services)
+- `plugins/cdk-notifications/` — Audio notification hooks (task completion, input needed)
+
+### Marketplace manifest
+- `.claude-plugin/marketplace.json` — Catalog listing all 5 plugins for the Claude Code plugin system
 
 ### CDK-internal files (for working on THIS repository)
-- `.claude/commands/` — Slash commands for CDK development only.
-- `.claude/hooks/` — Hooks that run during CDK development sessions.
-- `.claude/settings.json` — Claude Code settings for CDK development.
+- `.claude/commands/` — Slash commands for CDK development only
+- `.claude/hooks/` — Hooks that run during CDK development sessions
+- `.claude/settings.json` — Claude Code settings for CDK development
 
-**Do NOT move template files into `.claude/`.** The `commands/`, `docs/`, and `hooks/` directories are intentionally at the repo root because they are templates, not active Claude Code configuration for this repo.
+### Plugin anatomy
+Each plugin follows this structure:
+```
+plugins/<name>/
+├── .claude-plugin/
+│   └── plugin.json          # Plugin manifest (name, description, version)
+├── skills/                  # Skills (SKILL.md files) — optional
+│   └── <skill-name>/
+│       └── SKILL.md         # Skill definition with frontmatter
+├── hooks/                   # Hook definitions — optional
+│   └── hooks.json           # Declarative hook configuration
+├── scripts/                 # Hook shell scripts — optional
+└── <assets>/                # Plugin-specific assets (config, sounds, templates)
+```
+
+**Do NOT move plugin files into `.claude/`.** The `plugins/` directory and `.claude-plugin/` manifest are the distribution mechanism. The `.claude/` directory is only for CDK development configuration.
 
 ## Changelog & Release Process
 
