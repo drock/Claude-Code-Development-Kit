@@ -83,7 +83,7 @@ No feedback when tasks complete
 
 [![Demo-Video auf YouTube](https://img.youtube.com/vi/kChalBbMs4g/0.jpg)](https://youtu.be/kChalBbMs4g)
 
-
+> *Note: This demo shows the v2.x installation flow. See the Quick Start section below for current plugin-based installation.*
 
 ## Quick Start
 

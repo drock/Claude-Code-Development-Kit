@@ -23,6 +23,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Local development testing via `claude --plugin-dir`
 - Self-update support via plugin marketplace versioning
 
+### Fixed
+- Updated remaining "command" terminology to "skill" in plugin SKILL.md files (code-review, handoff)
+- Added v2.x deprecation note to YouTube demo video in README
+
 ### Removed
 - `install.sh` remote installer script (replaced by `/plugin marketplace add`)
 - `setup.sh` interactive setup script (replaced by plugin install + scaffold skill)
