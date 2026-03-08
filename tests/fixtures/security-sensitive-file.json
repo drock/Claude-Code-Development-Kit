@@ -1,0 +1,8 @@
+{
+  "tool_name": "mcp__gemini__consult_gemini",
+  "tool_input": {
+    "code_context": "",
+    "problem_description": "Review this configuration",
+    "attached_files": ["FIXTURE_DIR/.env"]
+  }
+}

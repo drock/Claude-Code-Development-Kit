@@ -15,6 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Documentation templates bundled into `cdk-docs` plugin scaffold skill
 
 ### Added
+- Plugin test infrastructure with 128 automated tests across 4 suites (structure validation, security hook, gemini hook, notifications hook)
+- Test project (`test-project/`) simulating a real target project for manual plugin testing
+- Setup script (`tests/setup-manual-test.sh`) to symlink-install plugins into the test project for interactive Claude Code testing
 - Plugin marketplace manifest (`.claude-plugin/marketplace.json`) for native Claude Code plugin distribution
 - Five modular plugins: `cdk-core`, `cdk-docs`, `cdk-gemini`, `cdk-security`, `cdk-notifications`
 - New `/cdk-docs:scaffold` skill to generate documentation structure in target projects (replaces `setup.sh` file copying)
@@ -24,6 +27,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Self-update support via plugin marketplace versioning
 
 ### Fixed
+- Security hook: replaced bash process substitution (`< <(...)`) with portable for-loops for compatibility with environments lacking `/dev/fd`
+- Security hook: added `--` to grep calls to prevent regex patterns starting with `--` from being misinterpreted as flags
 - Updated remaining "command" terminology to "skill" in plugin SKILL.md files (code-review, handoff)
 - Removed outdated YouTube demo video (showed v2.x installation flow) from README
 

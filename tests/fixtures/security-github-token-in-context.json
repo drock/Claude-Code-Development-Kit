@@ -1,0 +1,8 @@
+{
+  "tool_name": "mcp__gemini__consult_gemini",
+  "tool_input": {
+    "code_context": "const token = 'ghp_ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghij';",
+    "problem_description": "Help me fix the GitHub API integration",
+    "attached_files": []
+  }
+}

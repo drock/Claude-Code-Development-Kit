@@ -1,0 +1,8 @@
+{
+  "tool_name": "mcp__gemini__consult_gemini",
+  "tool_input": {
+    "code_context": "const dbUrl = 'postgres://user:password@localhost/mydb';",
+    "problem_description": "How do I configure the postgres connection?",
+    "attached_files": []
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "tool_name": "mcp__gemini__consult_gemini",
+  "tool_input": {
+    "code_context": "AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE\nAWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+    "problem_description": "Need help with S3 upload",
+    "attached_files": []
+  }
+}

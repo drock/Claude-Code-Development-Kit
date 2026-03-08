@@ -1,0 +1,9 @@
+{
+  "tool_name": "mcp__context7__query-docs",
+  "tool_input": {
+    "libraryId": "react; rm -rf /",
+    "code_context": "",
+    "problem_description": "",
+    "attached_files": []
+  }
+}

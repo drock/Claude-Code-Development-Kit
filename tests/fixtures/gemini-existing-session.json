@@ -1,0 +1,8 @@
+{
+  "tool_name": "mcp__gemini__consult_gemini",
+  "tool_input": {
+    "session_id": "abc-123-existing",
+    "problem_description": "Continue our API discussion",
+    "attached_files": []
+  }
+}

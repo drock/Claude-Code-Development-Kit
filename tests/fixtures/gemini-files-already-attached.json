@@ -1,0 +1,7 @@
+{
+  "tool_name": "mcp__gemini__consult_gemini",
+  "tool_input": {
+    "problem_description": "Help me design an API",
+    "attached_files": ["FIXTURE_PROJECT_STRUCTURE", "FIXTURE_MCP_RULES"]
+  }
+}

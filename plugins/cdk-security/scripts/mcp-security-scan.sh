@@ -33,25 +33,32 @@ check_sensitive_content() {
     local content="$1"
     local pattern_type="$2"
 
-    # Get patterns from JSON config
-    while IFS= read -r pattern; do
+    # Get patterns from JSON config (use temp vars for portability — avoids process substitution)
+    local patterns
+    patterns=$(jq -r ".patterns.$pattern_type[]" "$PATTERNS_FILE" 2>/dev/null || true)
+
+    local IFS=$'\n'
+    for pattern in $patterns; do
         [[ -z "$pattern" ]] && continue
-        if echo "$content" | grep -qiE "$pattern"; then
+        if echo "$content" | grep -qiE -- "$pattern"; then
             # Check whitelist
             local whitelisted=false
-            while IFS= read -r whitelist; do
+            local whitelist_entries
+            whitelist_entries=$(jq -r '.whitelist.allowed_mentions[]' "$PATTERNS_FILE" 2>/dev/null || true)
+
+            for whitelist in $whitelist_entries; do
                 [[ -z "$whitelist" ]] && continue
                 if echo "$content" | grep -qF "$whitelist"; then
                     whitelisted=true
                     break
                 fi
-            done < <(jq -r '.whitelist.allowed_mentions[]' "$PATTERNS_FILE" 2>/dev/null || true)
+            done
 
             if [[ "$whitelisted" == "false" ]]; then
                 return 0  # Found sensitive data
             fi
         fi
-    done < <(jq -r ".patterns.$pattern_type[]" "$PATTERNS_FILE" 2>/dev/null || true)
+    done
 
     return 1  # No sensitive data found
 }

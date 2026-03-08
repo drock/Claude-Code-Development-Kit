@@ -1,0 +1,12 @@
+{
+  "name": "cdk-test-project",
+  "version": "1.0.0",
+  "description": "Sample project for testing CDK plugins",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js"
+  },
+  "dependencies": {
+    "express": "^4.18.0"
+  }
+}
