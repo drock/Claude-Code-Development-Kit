@@ -9,7 +9,7 @@ description: Multi-agent code review surfacing only critical, high-impact findin
 
 ## Core Philosophy
 
-This command prioritizes **needle-moving discoveries** over exhaustive lists. Every finding must demonstrate significant impact on:
+This skill prioritizes **needle-moving discoveries** over exhaustive lists. Every finding must demonstrate significant impact on:
 - System reliability & stability
 - Security vulnerabilities with real exploitation risk
 - Performance bottlenecks affecting user experience
@@ -26,7 +26,7 @@ Changes that unlock new capabilities, remove significant constraints, or improve
 Minor style issues, micro-optimizations (<10%), theoretical best practices, edge cases affecting <1% of users.
 
 
-## Command Execution
+## Skill Execution
 
 User provided context: "$ARGUMENTS"
 

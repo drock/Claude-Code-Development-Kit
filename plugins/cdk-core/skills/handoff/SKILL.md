@@ -3,7 +3,7 @@ name: handoff
 description: Preserve context between sessions with intelligent handoff document management
 ---
 
-You are concluding work on the current project and need to create a comprehensive handoff for the next AI session. This command intelligently analyzes your current session achievements and updates the handoff document with both auto-detected progress and user-provided context.
+You are concluding work on the current project and need to create a comprehensive handoff for the next AI session. This skill intelligently analyzes your current session achievements and updates the handoff document with both auto-detected progress and user-provided context.
 
 ## Auto-Loaded Project Context:
 @docs/ai-context/HANDOFF.md
